@@ -1,0 +1,32 @@
+# Configuração de deploy no Render (https://render.com).
+# Um único serviço web que serve: o painel React + a API + o webhook + a política.
+services:
+  - type: web
+    name: cataliad-auto-dm
+    runtime: python
+    plan: free
+    # Build: instala deps Python, builda o frontend React (Node já disponível no Render).
+    buildCommand: |
+      pip install -r requirements.txt
+      cd frontend && npm install && npm run build
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      # As chaves secretas devem ser definidas NO PAINEL do Render (não aqui).
+      - key: WEBHOOK_VERIFY_TOKEN
+        sync: false
+      - key: IG_ACCESS_TOKEN
+        sync: false
+      - key: APP_SECRET
+        sync: false
+      - key: IG_USER_ID
+        sync: false
+      - key: GRAPH_VERSION
+        value: v21.0
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        value: claude-opus-4-8
