@@ -5,10 +5,8 @@ services:
     name: cataliad-auto-dm
     runtime: python
     plan: free
-    # Build: instala deps Python, builda o frontend React (Node já disponível no Render).
-    buildCommand: |
-      pip install -r requirements.txt
-      cd frontend && npm install && npm run build
+    # Build: só deps Python. O frontend já vai buildado (frontend/dist commitado).
+    buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       # As chaves secretas devem ser definidas NO PAINEL do Render (não aqui).
